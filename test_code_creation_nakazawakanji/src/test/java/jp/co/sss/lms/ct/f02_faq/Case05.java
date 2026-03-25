@@ -3,7 +3,6 @@ package jp.co.sss.lms.ct.f02_faq;
 import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +14,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 /**
@@ -76,12 +73,11 @@ public class Case05 {
 		//「機能」プルダウンを展開
 		webDriver.findElement(By.linkText("機能")).click();
 		//リスト展開待ち
-		final WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(60));
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.linkText("ヘルプ")));
+		visibilityTimeout(By.linkText("ヘルプ"), 10);
 		//「ヘルプ」リンクをクリック
 		webDriver.findElement(By.linkText("ヘルプ")).click();
 		//遷移待ち
-		wait.until(ExpectedConditions.titleIs("ヘルプ | LMS"));
+		visibilityTimeout(By.cssSelector("h2"), 10);
 		//遷移先検証
 		assertEquals("ヘルプ | LMS",webDriver.getTitle());
 		//証跡撮影
@@ -99,8 +95,7 @@ public class Case05 {
 		//最新タブはリストの最後に位置するため、アクセス
 		webDriver.switchTo().window(tabList.get(tabList.size()-1));
 		//待ち処理
-		final WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(60));
-		wait.until(ExpectedConditions.titleIs("よくある質問 | LMS"));
+		visibilityTimeout(By.cssSelector("h2"), 10);
 		//遷移先検証
 		assertEquals("よくある質問 | LMS",webDriver.getTitle());
 		//証跡撮影
@@ -110,9 +105,6 @@ public class Case05 {
 	@Order(5)
 	@DisplayName("テスト05 キーワード検索で該当キーワードを含む検索結果だけ表示")
 	void test05() {
-		//画面遷移後の待ち処理
-		final WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
-		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[type='submit']")));
 		//キーワード入力
 		webDriver.findElement(By.name("keyword")).sendKeys("助成金書類");
 		//検索前の入力証跡
@@ -121,7 +113,7 @@ public class Case05 {
 		webDriver.findElement(By.cssSelector("input[type='submit']")).click();
 		//検索結果検証
 		assertEquals("Q.助成金書類の作成方法が分かりません",webDriver.findElement(By.className("mb10")).getText());
-		assertEquals("助成金書類",webDriver.findElement(By.name("keyword")).getAttribute("value"));
+		assertEquals("助成金書類",webDriver.findElement(By.name("keyword")).getAttribute("value"));		
 		//証跡撮影
 		getEvidence(new Object() {},"result_1");
 		//スクロール

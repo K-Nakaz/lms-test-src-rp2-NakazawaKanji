@@ -3,7 +3,6 @@ package jp.co.sss.lms.ct.f02_faq;
 import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * 結合テスト よくある質問機能
@@ -76,12 +73,11 @@ public class Case06 {
 		//「機能」プルダウンを展開
 		webDriver.findElement(By.linkText("機能")).click();
 		//リスト展開待ち
-		final WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(60));
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.linkText("ヘルプ")));
+		visibilityTimeout(By.linkText("ヘルプ"), 10);
 		//「ヘルプ」リンクをクリック
 		webDriver.findElement(By.linkText("ヘルプ")).click();
 		//遷移待ち
-		wait.until(ExpectedConditions.titleIs("ヘルプ | LMS"));
+		visibilityTimeout(By.cssSelector("h2"), 10);
 		//遷移先検証
 		assertEquals("ヘルプ | LMS",webDriver.getTitle());
 		//証跡撮影
@@ -99,8 +95,7 @@ public class Case06 {
 		//最新タブはリストの最後に位置するため、アクセス
 		webDriver.switchTo().window(tabList.get(tabList.size()-1));
 		//待ち処理
-		final WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(60));
-		wait.until(ExpectedConditions.titleIs("よくある質問 | LMS"));
+		visibilityTimeout(By.cssSelector("h2"), 10);
 		//遷移先検証
 		assertEquals("よくある質問 | LMS",webDriver.getTitle());
 		//証跡撮影
@@ -111,9 +106,6 @@ public class Case06 {
 	@Order(5)
 	@DisplayName("テスト05 カテゴリ検索で該当カテゴリの検索結果だけ表示")
 	void test05() {
-		//画面遷移後の待ち処理
-		final WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
-		wait.until(ExpectedConditions.elementToBeClickable(By.linkText("【研修関係】")));
 		//カテゴリ検索欄の項目をクリック
 		webDriver.findElement(By.linkText("【研修関係】")).click();
 		//検索結果表示の待ち処理
